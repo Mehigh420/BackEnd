@@ -1,61 +1,47 @@
 const express = require('express')
-const morgan = require('morgan')
-const mysql = require('mysql2')
+const morgan = require('morgan');
+const { initializeApp } =require ("firebase/app");
+const { getFirestore } =require ("@firebase/firestore");
+const { addDoc, collection } =require ("@firebase/firestore");
 
-const app = express()
+const firebaseConfig = {
+  apiKey: "AIzaSyCLZuj-3P0FVYpvqhjvwCQVIYeYK4JRckE",
+  authDomain: "social-media-3748f.firebaseapp.com",
+  projectId: "social-media-3748f",
+  storageBucket: "social-media-3748f.appspot.com",
+  messagingSenderId: "253386140898",
+  appId: "1:253386140898:web:ab2bde9e91e23d4be402bb"
+};
 
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms"))
+const firebaseApp = initializeApp(firebaseConfig);
+const firestore = getFirestore(firebaseApp);
+const ref = collection(firestore, "test1");
+const app = express();
+app.use(express.json());
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
+const SaveMessage = async(message) =>{
+  console.log(message);
 
-// https://gist.githubusercontent.com/meech-ward/1723b2df87eae8bb6382828fba649d64/raw/ee52637cc953df669d95bb4ab68ac2ad1a96cd9f/lotr.sql
-const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-})
-
-function getRandomInt(max) {
-  return 1 + Math.floor(Math.random() * (max-1))
-}
-
-async function getCharacter(id) {
-  const [characters] = await pool.promise().query("SELECT * FROM characters WHERE id = ?", [
-    id,
-  ])
-  return characters[0]
-}
-async function randomId() {
-  const [rows] = await pool.promise().query(
-    "SELECT COUNT(*) as totalCharacters FROM characters"
-  )
-  const { totalCharacters } = rows[0]
-  const randomId = getRandomInt(totalCharacters)
-  return randomId
-}
-
-app.get("/test", (req, res) => {
-  res.send("<h1>It's working 🤗</h1>")
-})
-
-app.get("/", async (req, res) => {
-  try {
-    const id = await randomId()
-    const character = await getCharacter(id)
-    res.send(character)
-  } catch (error) {
-    res.send(error)
+  let data = {
+      message,
   }
-})
 
-app.get("/:id", async (req, res) => {
-  try {
-    const id = parseInt(req.params.id) || await randomId()
-    const character = await getCharacter(id)
-    res.send(character)
-  } catch (error) {
-    res.send(error)
+  try{
+   
+      addDoc(ref, data);
+
+  } catch(e){
+      console.log('NOT WORKING', e);
   }
-})
+}
+
+app.post(
+  "/sendMessage", async (req, res) => {
+    console.log(req.body)
+    await SaveMessage(req.body.message)
+    res.send("message received")
+  }
+)
 
 const port = process.env.PORT || 8080
 app.listen(port, () => console.log(`Listening on port ${port}`))
