@@ -31,12 +31,12 @@ const SaveMessage = async(message) =>{
       addDoc(ref, data);
 
   } catch(e){
-      console.log('NOT WORKING', e);
+      console.log('Not working', e);
   }
 }
 
 app.post(
-  "/sendMessage", async (req, res) => {
+  "/api/login", async (req, res) => {
     console.log(req.body)
     await SaveMessage(req.body.message)
     res.send("message received")
