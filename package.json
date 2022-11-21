@@ -10,10 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "firebase": "^9.14.0",
     "firestore": "^1.1.6",
+    "json": "^11.0.0",
     "morgan": "^1.10.0",
-    "mysql2": "^2.3.0"
+    "mysql2": "^2.3.0",
+    "parser": "^0.1.4"
   }
 }
