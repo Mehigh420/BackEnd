@@ -37,7 +37,7 @@ const SaveMessage = async(message) =>{
 
 app.post(
   "/sendMessage", async (req, res) => {
-    console.log(req.body)
+    console.log({body:req.body})
     await SaveMessage(req.body.message)
     res.send("message received")
   }
