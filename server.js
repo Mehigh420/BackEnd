@@ -15,7 +15,7 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore(firebaseApp);
-const ref = collection(firestore, "api");
+const ref = collection(firestore, "accounts");
 const app = express();
 // app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
 app.use(express.json());
