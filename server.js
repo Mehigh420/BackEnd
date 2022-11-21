@@ -27,7 +27,7 @@ const SaveMessage = async(message) =>{
   }
 
   try{
-   
+      console.log({data, ref})
       addDoc(ref, data);
 
   } catch(e){
